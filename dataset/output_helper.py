@@ -88,7 +88,24 @@ def makemydir(whatever):
   # let exception propagate if we just can't
   # cd into the specified directory
     os.chdir(whatever)
-    
+
+
+def save_batch_images_combine(coors,batch_num,save_dir_start='/mnt/external4/output_demo'):
+    reshape_coors = coors.reshape([50,18,2])
+
+    for i in range(reshape_coors.shape[0]):
+        idx_combine = 50 * batch_num + i
+        idx = str("%05d" % idx_combine)
+        target_dir = os.path.join(save_dir_start, str(0))
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
+        file_name = idx + '.jpeg'
+        output_dir = os.path.join(target_dir, file_name)
+        img = draw_pose_figure(reshape_coors[i])
+        cv2.imwrite(output_dir,img, [int( cv2.IMWRITE_JPEG_QUALITY), 95])
+
+
+
 def save_batch_images(coors,batch_num,save_dir_start='/mnt/external4/output_demo'):
     reshape_coors = coors.reshape([50,18,2])
     for i in range(reshape_coors.shape[0]):
@@ -102,8 +119,7 @@ def save_batch_images(coors,batch_num,save_dir_start='/mnt/external4/output_demo
         output_dir = os.path.join(target_dir, file_name)
         img = draw_pose_figure(reshape_coors[i])
         cv2.imwrite(output_dir,img, [int( cv2.IMWRITE_JPEG_QUALITY), 95])
-        if i == reshape_coors.shape[0] - 2:
-            b = 1
+
     
 def save_batch_images_long(coors,batch_num,save_dir_start='/mnt/external4/output_demo'):
     reshape_coors = coors.reshape([300,18,2])
